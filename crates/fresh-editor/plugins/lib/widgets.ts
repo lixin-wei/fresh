@@ -196,7 +196,9 @@ export function styledRow(
  * (chip after the label, and only the chip is clickable);
  * `labelWidth` pads the label so a column of controls aligns.
  * `indeterminate: true` renders a neutral `[-]` chip for an
- * unset/inherited value. */
+ * unset/inherited value. `mnemonic` names the accelerator letter
+ * (`"l"` for `Alt+L`) to underline where it first appears in the
+ * label; a letter the label lacks underlines nothing. */
 export function toggle(
   checked: boolean,
   label: string,
@@ -205,10 +207,11 @@ export function toggle(
     indeterminate?: boolean;
     labelFirst?: boolean;
     labelWidth?: number;
+    mnemonic?: string;
     key?: string;
   },
 ): WidgetSpec {
-  return {
+  const spec: WidgetSpec = {
     kind: "toggle",
     checked,
     label,
@@ -218,6 +221,9 @@ export function toggle(
     labelWidth: options?.labelWidth ?? 0,
     key: options?.key,
   };
+  // Omit rather than pass `undefined` (the bridge would send `null`).
+  if (options?.mnemonic !== undefined) spec.mnemonic = options.mnemonic;
+  return spec;
 }
 
 /** Numeric field, rendered as `label: [ 42 ]`. Press Left/Down

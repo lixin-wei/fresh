@@ -1131,6 +1131,7 @@ fn node_body(spec: &WidgetSpec, width: u16, cx: &Ctx<'_>, site: Site) -> Node<Ui
             indeterminate,
             label_first,
             label_width,
+            mnemonic,
             key,
         } => {
             let key = key.as_deref();
@@ -1158,6 +1159,10 @@ fn node_body(spec: &WidgetSpec, width: u16, cx: &Ctx<'_>, site: Site) -> Node<Ui
                         *label_width,
                         width as u32,
                     );
+                    let mut e = e;
+                    if let Some(m) = mnemonic {
+                        crate::widgets::apply_mnemonic(&mut e, label, m, is_focused);
+                    }
                     let end = e.text.len();
                     (e, (0, end))
                 }
@@ -4529,6 +4534,7 @@ pub(crate) mod tests {
             indeterminate: false,
             label_first,
             label_width: 0,
+            mnemonic: None,
             key: Some("t".into()),
         }
     }
